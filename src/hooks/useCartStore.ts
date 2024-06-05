@@ -1,35 +1,40 @@
-import {create} from "zustand";
-import {currentCart} from "@wix/ecom";
+import { create } from "zustand";
+import { currentCart } from "@wix/ecom";
 import { WixClient } from "@/context/wixContext";
 
+// Perluas tipe Cart untuk menyertakan subtotal
+interface ExtendedCart extends currentCart.Cart {
+  subtotal?: {
+    formattedAmount: string;
+  };
+}
+
 type CartState = {
-    cart:currentCart.Cart;
-    isLoading:boolean;
+    cart: ExtendedCart;
+    isLoading: boolean;
     counter: number;
-    getCart: (wixClient:WixClient) => void;
-    addItem: (wixClient:WixClient,productId: string, variantId:string, quantity:number) => void;
-    removeItem: (wixClient:WixClient,itemId:string)=> void;
+    getCart: (wixClient: WixClient) => void;
+    addItem: (wixClient: WixClient, productId: string, variantId: string, quantity: number) => void;
+    removeItem: (wixClient: WixClient, itemId: string) => void;
 };
 
-
-
 export const useCartStore = create<CartState>((set) => ({
-    cart:[],
+    cart: {} as ExtendedCart,
     isLoading: true,
-    counter:0,
-    getCart: async (wixCliennt) => {
-        const cart = await wixCliennt.currentCart.getCurrentCart();
-        set({cart:(cart || []), isLoading:false, counter:cart?.lineItems.length || 0})
+    counter: 0,
+    getCart: async (wixClient) => {
+        const cart = await wixClient.currentCart.getCurrentCart();
+        set({ cart: (cart || {} as ExtendedCart), isLoading: false, counter: cart?.lineItems.length || 0 });
     },
-    addItem:async (wixClient, productId, variantId, quantity) => {
-        set((state) => ({...state, isLoading:true}))
+    addItem: async (wixClient, productId, variantId, quantity) => {
+        set((state) => ({ ...state, isLoading: true }));
         const response = await wixClient.currentCart.addToCurrentCart({
             lineItems: [
                 {
                     catalogReference: {
                         appId: process.env.NEXT_PUBLIC_WIX_APP_ID!,
                         catalogItemId: productId,
-                        ...(variantId && {options: {variantId}}),
+                        ...(variantId && { options: { variantId } }),
                     },
                     quantity: quantity,
                 },
@@ -39,18 +44,17 @@ export const useCartStore = create<CartState>((set) => ({
         set({
             cart: response.cart,
             counter: response.cart?.lineItems.length,
-            isLoading:false,
+            isLoading: false,
         });
-
     },
-    removeItem:async (wixClient, itemId) => {
-        set((state) => ({...state, isLoading:true}))
-        const response = await wixClient.currentCart.removeLineItemsFromCurrentCart([itemId])
+    removeItem: async (wixClient, itemId) => {
+        set((state) => ({ ...state, isLoading: true }));
+        const response = await wixClient.currentCart.removeLineItemsFromCurrentCart([itemId]);
 
         set({
             cart: response.cart,
             counter: response.cart?.lineItems.length,
-            isLoading:false,
-        })
+            isLoading: false,
+        });
     },
-}))
+}));
