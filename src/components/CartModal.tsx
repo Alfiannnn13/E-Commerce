@@ -1,5 +1,3 @@
-"use client";
-
 import { useCartStore } from "@/hooks/useCartStore";
 import { useWixClient } from "@/hooks/useWixClient";
 import Image from "next/image";
@@ -15,7 +13,7 @@ const CartModal = () => {
     getCart(wixClient);
   }, [wixClient, getCart]);
 
-  console.log(cart)
+  console.log(cart);
 
   const handleCheckout = () => {
     const message = generateWhatsAppMessage(cart.lineItems || []);
@@ -39,63 +37,65 @@ const CartModal = () => {
 
   return (
     <div className="w-max absolute p-4 rounded-md shadow-xl bg-white top-12 right-0 flex flex-col gap-6 z-20">
-      {!cart.lineItems ? (
-        <div className="">Keranjang Kosong</div>
-      ) : (
-        <>
-          <h2 className="text-xl ">Keranjang Belanja</h2>
-          <div className="flex flex-col gap-8">
-            {cart.lineItems.map((item) => (
-              <div className="flex gap-4" key={item._id}>
-                {item.image && (
-                  <Image
-                    src={wixMedia.getScaledToFitImageUrl(item.image, 72, 96, {})}
-                    alt=""
-                    width={72}
-                    height={96}
-                    className="object-cover rounded-md"
-                  />
-                )}
-                <div className="flex flex-col justify-between w-full">
-                  <div className=""></div>
-                  <div className="flex items-center justify-between gap-8">
-                    <h3 className="font-semibold">{item.productName?.original}</h3>
-                    <div className="p-1 bg-gray-50 rounded-sm flex items-center gap-2">
-                      {item.quantity && item.quantity > 1 && (
-                        <div className="text-xs text-blue-500">{item.quantity} x </div>
-                      )}
-                      {item.price?.formattedAmount}
-                    </div>
-                  </div>
-                  <div className="text-sm text-gray-500">
-                    {item.availability?.status}
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-500">Qty. {item.quantity}</span>
-                    <span className="text-blue-500 cursor-pointer" onClick={() => removeItem(wixClient, item._id!)}>Remove</span>
-                  </div>
+  {!cart.lineItems ? (
+    <div className="">Keranjang Kosong</div>
+  ) : (
+    <>
+      <h2 className="text-xl ">Keranjang Belanja</h2>
+      <div className="flex flex-col gap-8">
+        {cart.lineItems.map((item) => (
+          <div className="flex flex-col gap-4" key={item._id}>
+            {item.image && (
+              <Image
+                src={wixMedia.getScaledToFitImageUrl(item.image, 72, 96, {})}
+                alt=""
+                width={72}
+                height={96}
+                className="object-cover rounded-md"
+              />
+            )}
+            <div className="flex flex-col justify-between w-full">
+              <div className="md:hidden">
+                <h3 className="font-semibold">{item.productName?.original}</h3>
+                <div className="text-sm text-gray-500">Qty. {item.quantity}</div>
+                <div className="text-sm text-gray-500">{item.availability?.status}</div>
+              </div>
+              <div className="hidden md:flex items-center justify-between gap-8">
+                <h3 className="font-semibold">{item.productName?.original}</h3>
+                <div className="p-1 bg-gray-50 rounded-sm flex items-center gap-2">
+                  {item.quantity && item.quantity > 1 && (
+                    <div className="text-xs text-blue-500">{item.quantity} x </div>
+                  )}
+                  {item.price?.formattedAmount}
                 </div>
               </div>
-            ))}
-          </div>
-          <div className="">
-            <div className="flex items-center justify-between font-semibold">
-              <span className="">Subtotal</span>
-              <span className="">{cart.subtotal?.formattedAmount || "N/A"}</span>
-            </div>
-            <p className="text-gray-500 text-sm mt-2 mb-4">
-              Shipping and taxes calculated at Checkout
-            </p>
-            <div className="flex justify-between text-sm">
-              <button className="rounded-md py-3 px-4 ring-1 ring-gray-300">View Cart</button>
-              <button className="rounded-md py-3 px-4 bg-black text-white" onClick={handleCheckout}>
-                Checkout
-              </button>
+              <div className="flex justify-between text-sm">
+                <div className="text-sm text-gray-500">{item.availability?.status}</div>
+                <span className="text-gray-500">Qty. {item.quantity}</span>
+                <span className="text-blue-500 cursor-pointer" onClick={() => removeItem(wixClient, item._id!)}>
+                  Remove
+                </span>
+              </div>
             </div>
           </div>
-        </>
-      )}
-    </div>
+        ))}
+      </div>
+      <div className="">
+        <div className="flex items-center justify-between font-semibold">
+          <span className="">Subtotal</span>
+          <span className="">{cart.subtotal?.formattedAmount || "N/A"}</span>
+        </div>
+        <p className="text-gray-500 text-sm mt-2 mb-4">Shipping and taxes calculated at Checkout</p>
+        <div className="flex justify-between text-sm">
+          <button className="rounded-md py-3 px-4 ring-1 ring-gray-300">View Cart</button>
+          <button className="rounded-md py-3 px-4 bg-black text-white" onClick={handleCheckout}>
+            Checkout
+          </button>
+        </div>
+      </div>
+    </>
+  )}
+</div>
   );
 };
 
