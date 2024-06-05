@@ -6,6 +6,7 @@ import { WixClient } from "@/context/wixContext";
 interface ExtendedCart extends currentCart.Cart {
   subtotal?: {
     formattedAmount: string;
+    
   };
 }
 
@@ -16,6 +17,7 @@ type CartState = {
     getCart: (wixClient: WixClient) => void;
     addItem: (wixClient: WixClient, productId: string, variantId: string, quantity: number) => void;
     removeItem: (wixClient: WixClient, itemId: string) => void;
+    
 };
 
 export const useCartStore = create<CartState>((set) => ({
