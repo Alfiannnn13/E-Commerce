@@ -22,12 +22,12 @@ const NavIcons = () => {
 
   // const isLoggedIn = false;
 
-  const handleProfile = () => {
-    if (!isLoggedIn) {
-      router.push("/login");
-    }
-    setIsProfileOpen((prev) => !prev);
-  };
+  // const handleProfile = () => {
+  //   if (!isLoggedIn) {
+  //     router.push("/login");
+  //   }
+  //   setIsProfileOpen((prev) => !prev);
+  // };
 
   // AUTH WITH WIX-MANAGED AUTH
   // const wixClient = useWixClient();
@@ -45,14 +45,14 @@ const NavIcons = () => {
 
 
 
-  const handleLogout = async () => {
-    setIsLoading(true);
-    Cookies.remove("refreshToken");
-    const { logoutUrl } = await wixClient.auth.logout(window.location.href);
-    setIsLoading(false);
-    setIsProfileOpen(false);
-    router.push(logoutUrl);
-  };
+  // const handleLogout = async () => {
+  //   setIsLoading(true);
+  //   Cookies.remove("refreshToken");
+  //   const { logoutUrl } = await wixClient.auth.logout(window.location.href);
+  //   setIsLoading(false);
+  //   setIsProfileOpen(false);
+  //   router.push(logoutUrl);
+  // };
 
   const {cart, counter, getCart } = useCartStore();
 

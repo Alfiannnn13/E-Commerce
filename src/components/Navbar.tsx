@@ -16,7 +16,7 @@ const Navbar = () => {
             <Image src="/logo.png" alt="" width={32} height={32} />
           </Link>
         </div>
-        <Menu />
+        <NavIcons/>
       </div>
 
       {/* {Layar Gede} */}
