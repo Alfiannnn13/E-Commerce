@@ -48,7 +48,7 @@ const CartModal = () => {
           <div className="flex flex-col gap-8">
             {/* ITEM */}
             {cart.lineItems.map((item) => (
-              <div className="flex gap-4" key={item._id}>
+              <div className="flex flex-col md:flex-row gap-4" key={item._id}>
                 {item.image && (
                   <Image
                     src={wixMedia.getScaledToFillImageUrl(
@@ -65,31 +65,31 @@ const CartModal = () => {
                 )}
                 <div className="flex flex-col justify-between w-full">
                   {/* TOP */}
-                  <div className="">
+                  <div className="flex flex-col md:flex-row justify-between">
                     {/* TITLE */}
-                    <div className="flex items-center justify-between gap-8">
+                    <div className="flex flex-col md:flex-row items-start md:items-center justify-between w-full gap-2 md:gap-8">
                       <h3 className="font-semibold">
                         {item.productName?.original}
                       </h3>
-                      <div className="p-1 bg-gray-50 rounded-sm flex items-center gap-2">
+                      <div className="flex flex-row items-center gap-2 md:gap-0">
                         {item.quantity && item.quantity > 1 && (
                           <div className="text-xs text-green-500">
-                            {item.quantity} x{" "}
+                            {item.quantity} x
                           </div>
                         )}
-                        {item.price?.amount}
+                        <div className="p-1 bg-gray-50 rounded-sm">
+                          {item.price?.formattedAmount}
+                        </div>
                       </div>
                     </div>
-                    {/* DESC */}
-                    <div className="text-sm text-gray-500">
+                    <div className="text-sm text-gray-500 md:hidden">
                       {item.availability?.status}
                     </div>
                   </div>
                   {/* BOTTOM */}
-                  <div className="flex justify-between text-sm">
+                  <div className="flex flex-col md:flex-row justify-between text-sm gap-2 mt-2 md:mt-0">
                     <span className="text-gray-500">Qty. {item.quantity}</span>
                     <span className="text-gray-500">Size. {item.descriptionLines && item.descriptionLines[0] && item.descriptionLines[0].plainText && item.descriptionLines[0].plainText.original}</span>
-
                     <span
                       className="text-blue-500"
                       style={{ cursor: isLoading ? "not-allowed" : "pointer" }}
